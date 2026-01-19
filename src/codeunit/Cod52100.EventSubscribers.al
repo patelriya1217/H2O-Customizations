@@ -56,8 +56,11 @@ codeunit 52100 "H2O Event Subscribers"
     local procedure OnBeforeDeleteSalesLine(var Rec: Record "Sales Line")
     var
         TimeKeepingTableRec: Record "H2O Time Keeping Table";
+        SalesHeader: Record "Sales Header";
     begin
         if SalesPostBoolean_Grec then
+            exit;
+        if SalesHeader.Get(Rec."Document Type", Rec."Document No.") and SalesHeader."OK To Delete" then
             exit;
         IF Rec.Type = Rec.Type::Resource then
             If Res.get(Rec."No.") then begin
